@@ -1,0 +1,9 @@
+/target
+
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/codeStyles/Project.xml
+/.idea/modules.xml
+/.idea/substrate-course-exercise3.iml
+/.idea/vcs.xml
+/Cargo.lock
