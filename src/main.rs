@@ -1,48 +1,17 @@
 use std::net::{TcpListener, TcpStream, SocketAddr};
 use std::io::{Read, Write, Error};
-mod trafficlight;
-mod int_sum;
-mod area;
 
 fn main() {
-}
-fn call_on_ref_zero<F>(f: F) where for<'a> F: Fn(&'a i32) {
-    let zero = 0;
-    f(&zero);
-}
-struct Closure<F> {
-    data: (u8, u16),
-    func: F,
-}
-
-impl<F> Closure<F>
-    where F: Fn(&(u8, u16)) -> &u8,
-{
-    fn call(&self) -> &u8 {
-        (self.func)(&self.data)
-    }
+    let args: Vec<String> = std::env::args().collect();
+    let port:u32 = if args.is_empty() {
+        9999
+    } else {
+        (&args[0]).parse::<u32>().unwrap_or(9999)
+    };
+    println!("Server start at {}", port);
+    start_server(port)
 }
 
-fn mytest<T:M + N>(test:T){
-    test.test_m();
-    test.test_n();
-}
-
-trait M{
-    fn test_m(&self);
-}
-trait N{
-    fn test_n(&self);
-}
-struct Mm;
-
-
-fn test(t: impl M){}
-fn test2<T:M>(t: T){}
-
-fn get_index<'l, T>(v: &'l [T], index: usize) -> &'l T {
-    &v[index]
-}
 pub fn start_server(port: u32) {
     // init a ServerSocket, listen to {port}
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port)).expect(format!("Server binding to port {} failed", port).as_str());
@@ -54,7 +23,7 @@ pub fn start_server(port: u32) {
                 std::thread::spawn(move || {
                     let handle_result = handle_client(client.0);
                     match handle_result {
-                       Err(e) => eprintln!("Remote connection network error:: {:?}", e),
+                        Err(e) => eprintln!("Remote connection network error:: {:?}", e),
                         _ => println!("Remote connection closed!")
                     }
                 });
